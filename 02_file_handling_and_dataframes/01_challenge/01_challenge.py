@@ -46,7 +46,6 @@ def list_files_and_sizes(directory):
 def main():
     # パスをraw文字列として指定
     data_dir = 'data/text_files'
-    data_dir2 = 'data'
     output_file = 'combined_books.txt'
 
     # 書籍のファイルを辞書にインポート
