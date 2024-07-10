@@ -13,7 +13,11 @@ def transform_date_format(date_str):
     文字列: 'DD/MM/YYYY' 形式に変換した日付文字列、または元の文字列 (形式が無効だった場合)
     """
     # 日付形式を変換するロジックを実装してください
-    pass
+    try:
+        year, month, day = date_str.split('-')
+        return f"{day}/{month}/{year}"
+    except ValueError:
+        return date_str
 
 def apply_date_transformation(db_path, table_name, column_name):
     """
@@ -31,7 +35,10 @@ def apply_date_transformation(db_path, table_name, column_name):
         # 指定したテーブルをDataFrameに読み込んでください
         # 指定した列にtransform_date_format関数を適用してください
         # 変更後のDataFrameを返してください
-        pass
+        df = pd.read_sql_query(f"SELECT * FROM {table_name}", conn)
+        df[column_name] = df[column_name].apply(transform_date_format)
+        return df
+
 
 # 使用例 (受講者はこれを変更してください)
 if __name__ == "__main__":
