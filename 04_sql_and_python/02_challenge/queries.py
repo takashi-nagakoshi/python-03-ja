@@ -13,7 +13,7 @@ def query_orders(db):
     戻り値:
         注文を表すタプルのリスト
     """
-    query = ""  # ここにSQLクエリを書いてください
+    query = "SELECT * FROM Orders o ORDER BY OrderID ASC"  # ここにSQLクエリを書いてください
     results = db.execute(query)
     results = results.fetchall()
     return results
@@ -33,8 +33,14 @@ def get_orders_range(db, date_from, date_to):
     戻り値:
         注文を表すタプルのリスト
     """
-    query = ""  # ここにSQLクエリを書いてください
-    results = db.execute(query)
+    query = """
+    SELECT * FROM Orders 
+    WHERE OrderDate > ? AND OrderDate <= ?
+    ORDER BY OrderDate ASC
+    """  # ここにSQLクエリを書いてください
+    # date_from = '1996-07-04'
+    # date_to = '1996-07-10'
+    results = db.execute(query,(date_from,date_to))
     results = results.fetchall()
     return results
 
@@ -50,14 +56,19 @@ def get_order_details(db):
     戻り値:
         注文の詳細情報を表すタプルのリスト
     """
-    query = ""  # ここにSQLクエリを書いてください
+    query = """
+    SELECT OrderDetails.OrderID,Products.ProductName,OrderDetails.Quantity
+    FROM Products
+    LEFT JOIN OrderDetails ON Products.ProductID = OrderDetails.ProductID
+    ORDER BY OrderDetails.OrderID;
+    """ # ここにSQLクエリを書いてください
     results = db.execute(query)
     results = results.fetchall()
     return results
 
 def main():
     # SQLiteデータベースに接続
-    conn = sqlite3.connect('northwind.db')
+    conn = sqlite3.connect('../data/northwind.db')
 
     # query_orders関数のテスト
     print("All Orders:")
@@ -82,3 +93,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+    # SELECT od.OrderID,Quantity,ProductName FROM Orders o ,OrderDetails od ,Products p 
+    # ORDER BY od.OrderID ASC
